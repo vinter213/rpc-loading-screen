@@ -1,0 +1,294 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>RPC Loading</title>
+<link rel="stylesheet" href="loading.css">
+<style>
+html, body {
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  background:#100914;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+#background {
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background-color:#100914;
+  background-image:url("FonRP.png");
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-size:cover;
+}
+
+/* Компактная центральная область без рамки и панели */
+#rpc {
+  position:absolute;
+  left:15%;
+  top:10%;
+  width:70%;
+  height:80%;
+  box-sizing:border-box;
+  padding:2% 3%;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+  text-align:center;
+}
+
+#logo {
+  display:block;
+  width:360px;
+  max-width:70%;
+  max-height:160px;
+  height:auto;
+  object-fit:contain;
+  object-position:center;
+  margin:0 auto;
+}
+
+h1 {
+  margin:12px 0 5px;
+  font-size:40px;
+  letter-spacing:4px;
+  text-align:center;
+}
+
+#subtitle {
+  color:#ff789f;
+  letter-spacing:3px;
+  font-size:14px;
+  text-align:center;
+}
+
+#server_info {
+  position:relative;
+  width:80%;
+  max-width:650px;
+  box-sizing:border-box;
+  margin:25px auto 0;
+  padding:14px 18px;
+  border:0;
+  border-left:0;
+  background:rgba(12,6,20,.35);
+  white-space:normal;
+  text-align:center;
+}
+
+#serverName {
+  font-size:22px;
+  font-weight:bold;
+}
+
+#serverMap, #serverGamemode, #status {
+  margin-top:8px;
+  font-size:15px;
+  color:#e0c9e5;
+}
+
+#bottom {
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:3% !important;
+  width:100% !important;
+  height:auto !important;
+  display:block !important;
+  box-sizing:border-box !important;
+  padding:12px 10px !important;
+  margin:0 !important;
+  text-align:center !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  z-index:9999 !important;
+  pointer-events:auto !important;
+}
+
+button {
+  background:rgba(111,22,79,.85);
+  color:#fff;
+  border:1px solid #f05b9c;
+  padding:9px 16px;
+  margin:5px;
+  cursor:pointer;
+}
+
+label {
+  color:#fff;
+}
+
+input {
+  accent-color:#fa477f;
+}
+
+#musicState { display:inline-block !important; background:transparent !important; color:#f3d9ef !important; margin:5px 12px !important; pointer-events:none; }
+
+#spambox {
+  display:none;
+}
+
+/* Исправленная панель управления музыкой */
+#bottom {
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:3% !important;
+  width:100% !important;
+  height:auto !important;
+  display:block !important;
+  box-sizing:border-box !important;
+  padding:12px 10px !important;
+  margin:0 !important;
+  text-align:center !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  z-index:9999 !important;
+  pointer-events:auto !important;
+}
+
+#musicButton {
+  display:inline-block !important;
+  position:relative !important;
+  z-index:10000 !important;
+  padding:10px 18px !important;
+  margin:5px 12px !important;
+  background:#6f164f !important;
+  color:#fff !important;
+  border:1px solid #f05b9c !important;
+  font-size:15px !important;
+  cursor:pointer !important;
+}
+
+#bottom label { background:transparent !important; color:#fff !important; }
+
+#volume {
+  display:inline-block !important;
+  width:150px !important;
+  height:18px !important;
+  vertical-align:middle !important;
+  cursor:pointer !important;
+  position:relative !important;
+  z-index:10000 !important;
+}
+
+#musicState { display:inline-block !important; background:transparent !important; color:#f3d9ef !important; margin:5px 12px !important; pointer-events:none; }
+
+/* Исправление кликов по управлению музыкой */
+#background {
+  z-index:0 !important;
+  pointer-events:none !important;
+}
+
+#rpc {
+  z-index:10 !important;
+  pointer-events:none !important;
+}
+
+#bottom {
+  position:absolute !important;
+  z-index:99999 !important;
+  pointer-events:auto !important;
+  background:transparent !important;
+}
+
+#bottom button,
+#bottom input,
+#bottom label {
+  position:relative !important;
+  z-index:100000 !important;
+  pointer-events:auto !important;
+}
+
+#musicButton {
+  cursor:pointer !important;
+}
+
+#volume {
+  cursor:pointer !important;
+  touch-action:auto !important;
+}
+</style>
+</head>
+<body>
+<div id="background">
+  <main id="rpc">
+    <img id="logo" src="Logo_RPC.png" alt="RPC">
+    <h1>RPC</h1>
+    <div id="subtitle">RUSSIAN MEDIUM ROLEPLAY</div>
+    <section id="server_info">
+      <div id="serverName">RPC | Russian Medium RP</div>
+      <div id="serverMap">Карта загружается...</div>
+      <div id="serverGamemode">DarkRP</div>
+      <div id="status">Подготовка к подключению...</div>
+    </section>
+    
+  </main>
+</div>
+<audio id="rpcTrack" src="rpc_music.mp3" preload="auto" loop></audio>
+
+<script>
+(function(){
+  var track=document.getElementById("rpcTrack");
+  var button=document.getElementById("musicButton");
+  var volume=document.getElementById("volume");
+  var state=document.getElementById("musicState");
+  track.volume = 0.4;
+
+  function playTrack(){
+    track.play().then(function(){
+      
+      
+    }).catch(function(){
+      
+      state.textContent="Нажми кнопку для запуска музыки";
+    });
+  }
+  button.addEventListener("click",function(){
+    if(track.paused) playTrack();
+    else {
+      track.pause();
+      button.textContent="▶ Продолжить";
+      state.textContent="Музыка на паузе";
+    }
+  });
+  volume.addEventListener("input",function(){
+    track.volume=Number(volume.value)/100;
+  });
+
+  window.GameDetails=function(servername,serverurl,mapname,maxplayers,steamid,gamemode,gamevolume,lang,gamemodeNice){
+    document.getElementById("serverName").textContent=servername||"RPC | Russian Medium RP";
+    document.getElementById("serverMap").textContent="Карта: "+(mapname||"неизвестна");
+    document.getElementById("serverGamemode").textContent="Режим: "+(gamemodeNice||gamemode||"DarkRP");
+    document.getElementById("status").textContent="Подключение к серверу...";
+    
+    playTrack();
+  };
+  window.DownloadingFile=function(file){
+    document.getElementById("status").textContent="Загрузка: "+file;
+  };
+  window.SetStatusChanged=function(status){
+    document.getElementById("status").textContent=status||"Загрузка ресурсов...";
+  };
+  window.addEventListener("load",function(){playTrack();});
+})();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
