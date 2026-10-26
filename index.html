@@ -91,6 +91,33 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
   backdrop-filter: blur(18px);
 }
 .server-card::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: linear-gradient(90deg,var(--red),var(--violet),transparent); }
+
+.card-tabs { display: flex; gap: 8px; margin: 0 0 22px; }
+.card-tab {
+  flex: 1; padding: 10px 12px; border: 1px solid var(--line); border-radius: 7px;
+  background: rgba(255,255,255,.035); color: #b9b0c3; font: inherit; font-size: 10px;
+  font-weight: 800; letter-spacing: .16em; cursor: pointer; transition: .2s ease;
+}
+.card-tab.active { border-color: rgba(255,49,88,.55); background: linear-gradient(110deg,rgba(255,49,88,.17),rgba(168,85,247,.15)); color: #fff; }
+.card-tab:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+.staff-panel[hidden], .server-panel[hidden] { display: none !important; }
+.staff-intro { margin: -10px 0 18px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.staff-member {
+  display: flex; align-items: center; gap: 13px; padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.staff-member:last-child { border-bottom: 0; padding-bottom: 0; }
+.staff-avatar {
+  display: grid; place-items: center; flex: 0 0 42px; width: 42px; height: 42px;
+  border: 1px solid rgba(168,85,247,.4); border-radius: 10px;
+  background: linear-gradient(145deg,rgba(255,49,88,.2),rgba(168,85,247,.2));
+  color: #fff; font-size: 15px; font-weight: 900;
+}
+.staff-info { min-width: 0; flex: 1; }
+.staff-name { color: #fff; font-size: 14px; font-weight: 800; overflow-wrap: anywhere; }
+.staff-role { margin-top: 5px; color: #b9b0c3; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.staff-badge { padding: 6px 8px; border: 1px solid rgba(255,49,88,.3); border-radius: 5px; color: #f5a2b5; font-size: 9px; letter-spacing: .1em; }
+
 .card-label { color: #a99bb5; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; }
 .server-title { margin-top: 11px; font-size: clamp(19px, 2vw, 25px); font-weight: 800; letter-spacing: -.035em; overflow-wrap: anywhere; }
 .server-caption { margin-top: 7px; color: var(--muted); font-size: 12px; }
@@ -207,7 +234,12 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
       </div>
     </section>
 
-    <section class="server-card" aria-label="Информация о сервере">
+    <section class="server-card" aria-label="Информация о сервере и команде">
+      <div class="card-tabs" role="tablist" aria-label="Категории загрузочного экрана">
+        <button class="card-tab active" id="serverTab" type="button" role="tab" aria-selected="true" aria-controls="serverPanel">СЕРВЕР</button>
+        <button class="card-tab" id="staffTab" type="button" role="tab" aria-selected="false" aria-controls="staffPanel">STAFF</button>
+      </div>
+      <div class="server-panel" id="serverPanel" role="tabpanel" aria-labelledby="serverTab">
       <div class="card-label">Сведения о подключении</div>
       <div class="server-title" id="serverName">RPC | Russian Medium RP</div>
       <div class="server-caption">Сервер Garry's Mod · Соединение с игровым миром</div>
@@ -218,6 +250,22 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
       <div class="status-line"><span class="status-led"></span><span id="status" aria-live="polite">Подготовка к подключению…</span></div>
       <div class="progress-track" role="progressbar" aria-label="Загрузка файлов" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressBar"></div></div>
       <div class="progress-meta"><span id="progressLabel">Ожидание загрузки</span><span id="progressPercent">0%</span></div>
+      </div>
+      <div class="staff-panel" id="staffPanel" role="tabpanel" aria-labelledby="staffTab" hidden>
+        <div class="card-label">Люди за проектом</div>
+        <div class="server-title">Команда RPC</div>
+        <p class="staff-intro">Команда, которая развивает сервер и помогает поддерживать порядок в городе.</p>
+        <div class="staff-member">
+          <div class="staff-avatar" aria-hidden="true">JV</div>
+          <div class="staff-info"><div class="staff-name">Jr ViNter</div><div class="staff-role">Owner · Владелец</div></div>
+          <span class="staff-badge">OWNER</span>
+        </div>
+        <div class="staff-member">
+          <div class="staff-avatar" aria-hidden="true">SK</div>
+          <div class="staff-info"><div class="staff-name">Şkîł</div><div class="staff-role">Co Owner · Совладелец</div></div>
+          <span class="staff-badge">CO-OWNER</span>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -249,6 +297,22 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
   var totalFiles = null;
   var neededFiles = null;
   var progress = 0;
+
+  var serverTab = byId("serverTab");
+  var staffTab = byId("staffTab");
+  var serverPanel = byId("serverPanel");
+  var staffPanel = byId("staffPanel");
+  function showCategory(category) {
+    var showStaff = category === "staff";
+    serverPanel.hidden = showStaff;
+    staffPanel.hidden = !showStaff;
+    serverTab.classList.toggle("active", !showStaff);
+    staffTab.classList.toggle("active", showStaff);
+    serverTab.setAttribute("aria-selected", String(!showStaff));
+    staffTab.setAttribute("aria-selected", String(showStaff));
+  }
+  serverTab.addEventListener("click", function () { showCategory("server"); });
+  staffTab.addEventListener("click", function () { showCategory("staff"); });
 
   var backgroundA = byId("background");
   var backgroundB = byId("background-next");
