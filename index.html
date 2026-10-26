@@ -1,363 +1,325 @@
-
 <!doctype html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RPC Loading</title>
-
+<meta name="theme-color" content="#09070d">
+<title>RPC — Russian Medium Roleplay</title>
 <style>
-* {
-  box-sizing: border-box;
+:root {
+  color-scheme: dark;
+  --bg: #09070d;
+  --panel: rgba(15, 11, 22, .76);
+  --line: rgba(255, 255, 255, .12);
+  --muted: #b9b0c3;
+  --red: #ff3158;
+  --violet: #a855f7;
 }
-
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: #100914;
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+body {
+  background: var(--bg);
   color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
-
 #background {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background-color: #100914;
-  background-image: url("https://rpc-loading-screen.onrender.com/FonRP.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  pointer-events: none;
+  position: fixed; inset: 0; z-index: 0;
+  background: #100914 url("FonRP.png") center / cover no-repeat;
+  transform: scale(1.025);
+  animation: background-drift 24s ease-in-out infinite alternate;
 }
-
-/* Затемнение для читаемости текста */
-
-
-#rpc {
-  position: absolute;
-  z-index: 10;
-  left: 15%;
-  top: 8%;
-  width: 70%;
-  height: 82%;
-  padding: 2% 3%;
-  text-align: center;
-  background: transparent;
-  pointer-events: none;
+#shade {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(7,5,11,.88) 0%, rgba(7,5,11,.58) 45%, rgba(7,5,11,.30) 100%),
+    linear-gradient(0deg, rgba(7,5,11,.92) 0%, transparent 38%, rgba(7,5,11,.30) 100%),
+    radial-gradient(ellipse at 72% 40%, rgba(168,85,247,.18), transparent 48%);
 }
-
-#logo {
-  display: block;
-  width: 360px;
-  max-width: 70%;
-  max-height: 160px;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
-  margin: 0 auto;
+#grain {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: .14;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.23'/%3E%3C/svg%3E");
 }
-
-h1 {
-  margin: 12px 0 5px;
-  font-size: 40px;
-  letter-spacing: 4px;
-  text-align: center;
-  text-shadow: 0 2px 15px #000;
+.shell {
+  position: relative; z-index: 3; width: 100%; height: 100%;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: clamp(24px, 4.2vw, 64px) clamp(24px, 6vw, 96px) clamp(22px, 3.2vh, 38px);
 }
-
-#subtitle {
-  color: #ff789f;
-  letter-spacing: 3px;
-  font-size: 14px;
-  text-align: center;
-  text-shadow: 0 2px 10px #000;
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { display: flex; align-items: center; gap: 16px; min-width: 0; }
+#logo { width: 76px; height: 76px; object-fit: contain; filter: drop-shadow(0 8px 26px rgba(255,49,88,.2)); }
+.brand-copy { display: flex; flex-direction: column; gap: 5px; }
+.brand-name { font-size: 13px; font-weight: 800; letter-spacing: .22em; }
+.brand-sub { color: var(--muted); font-size: 10px; letter-spacing: .19em; }
+.live-pill {
+  display: inline-flex; align-items: center; gap: 9px; padding: 10px 14px;
+  border: 1px solid var(--line); border-radius: 999px; background: rgba(9,7,13,.42);
+  color: #eee7f4; font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  backdrop-filter: blur(12px);
 }
-
-#server_info {
-  position: relative;
-  width: 80%;
-  max-width: 650px;
-  margin: 25px auto 0;
-  padding: 14px 18px;
-  background: rgba(12, 6, 20, .48);
-  white-space: normal;
-  text-align: center;
-  text-shadow: 0 2px 8px #000;
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #b3f7c7; box-shadow: 0 0 13px #4ade80; }
+.main {
+  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+  align-items: center; gap: clamp(36px, 7vw, 110px); width: 100%; max-width: 1450px; margin: auto;
 }
-
-#serverName {
-  font-size: 22px;
-  font-weight: bold;
+.eyebrow { display: flex; align-items: center; gap: 12px; color: #f6a3bb; font-size: 11px; font-weight: 700; letter-spacing: .28em; text-transform: uppercase; }
+.eyebrow::before { content: ""; display: block; width: 30px; height: 2px; background: linear-gradient(90deg,var(--red),var(--violet)); }
+h1 { margin: 22px 0 14px; font-size: clamp(54px, 8.2vw, 112px); line-height: .9; font-weight: 900; letter-spacing: -.075em; }
+h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.78); }
+.intro { max-width: 500px; margin: 0; color: #d1c8d9; font-size: clamp(14px, 1.25vw, 17px); line-height: 1.75; }
+.intro strong { color: #fff; font-weight: 700; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+.tag { padding: 8px 11px; border: 1px solid var(--line); background: rgba(12,9,17,.45); border-radius: 4px; color: #e8dfee; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.server-card {
+  position: relative; overflow: hidden; padding: clamp(22px, 2.5vw, 34px);
+  border: 1px solid rgba(255,255,255,.15); border-radius: 14px;
+  background: linear-gradient(145deg, rgba(25,18,34,.88), rgba(9,7,13,.82));
+  box-shadow: 0 28px 90px rgba(0,0,0,.35), inset 0 1px rgba(255,255,255,.05);
+  backdrop-filter: blur(18px);
 }
-
-#serverMap,
-#serverGamemode,
-#status {
-  margin-top: 8px;
-  font-size: 15px;
-  color: #e0c9e5;
-  overflow-wrap: anywhere;
+.server-card::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: linear-gradient(90deg,var(--red),var(--violet),transparent); }
+.card-label { color: #a99bb5; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; }
+.server-title { margin-top: 11px; font-size: clamp(19px, 2vw, 25px); font-weight: 800; letter-spacing: -.035em; overflow-wrap: anywhere; }
+.server-caption { margin-top: 7px; color: var(--muted); font-size: 12px; }
+.rule { height: 1px; margin: 23px 0; background: var(--line); }
+.info-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 8px 0; font-size: 12px; }
+.info-row .key { color: #a99fb2; }
+.info-row .value { color: #fff; font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+.status-line { display: flex; align-items: center; gap: 9px; margin-top: 14px; color: #f4dce9; font-size: 12px; min-height: 18px; }
+.status-led { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; background: var(--red); box-shadow: 0 0 12px rgba(255,49,88,.75); animation: pulse 1.6s infinite; }
+.progress-track { height: 4px; margin-top: 15px; overflow: hidden; border-radius: 8px; background: rgba(255,255,255,.1); }
+#progressBar { width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg,var(--red),var(--violet)); box-shadow: 0 0 16px rgba(168,85,247,.45); transition: width .35s ease; }
+.progress-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 9px; color: #9d92a8; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.footer { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+.footer-note { color: #b8adbf; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; line-height: 1.8; }
+.footer-note strong { color: #fff; font-weight: 700; }
+.music {
+  display: flex; align-items: center; gap: 12px; padding: 10px 13px;
+  border: 1px solid var(--line); border-radius: 9px; background: rgba(12,9,17,.62);
+  backdrop-filter: blur(12px); pointer-events: auto;
 }
-
-/* Нижняя панель музыки */
-#bottom {
-  position: fixed;
-  z-index: 99999;
-  left: 0;
-  right: 0;
-  bottom: 3%;
-  width: 100%;
-  padding: 12px 10px;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-align: center;
-  background: transparent;
-  pointer-events: auto;
+#musicButton {
+  display: grid; place-items: center; width: 34px; height: 34px; padding: 0;
+  border: 1px solid rgba(255,49,88,.55); border-radius: 7px; background: rgba(255,49,88,.13);
+  color: #fff; font-size: 14px; cursor: pointer; transition: background .2s, transform .2s;
 }
-
-button {
-  padding: 10px 18px;
-  margin: 5px;
-  background: rgba(111, 22, 79, .92);
-  color: #fff;
-  border: 1px solid #f05b9c;
-  font-size: 15px;
-  cursor: pointer;
-  pointer-events: auto;
+#musicButton:hover { background: rgba(255,49,88,.3); transform: translateY(-1px); }
+.music-copy { display: flex; flex-direction: column; gap: 4px; min-width: 104px; }
+.music-title { color: #fff; font-size: 11px; font-weight: 700; }
+#musicState { color: #a99fb2; font-size: 10px; }
+#volume { width: 76px; accent-color: var(--red); cursor: pointer; }
+.music-label { color: #a99fb2; font-size: 9px; }
+@keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 4px rgba(255,49,88,.35); } }
+@keyframes background-drift { from { transform: scale(1.025) translate3d(0,0,0); } to { transform: scale(1.075) translate3d(-.6%,.4%,0); } }
+@media (max-width: 850px) {
+  .shell { padding: 22px 24px; }
+  .main { grid-template-columns: 1fr; gap: 24px; max-width: 620px; }
+  .hero { text-align: center; }
+  .eyebrow { justify-content: center; }
+  .intro { margin-inline: auto; }
+  .tags { justify-content: center; margin-top: 16px; }
+  h1 { margin-top: 16px; font-size: clamp(48px, 12vw, 76px); }
+  #logo { width: 54px; height: 54px; }
+  .brand { gap: 11px; }
+  .server-card { padding: 20px; }
+  .rule { margin: 14px 0; }
+  .footer { align-items: center; }
 }
-
-button:hover {
-  background: #8b2164;
+@media (max-width: 520px) {
+  .shell { padding: 16px; }
+  .topbar { align-items: flex-start; }
+  #logo { width: 42px; height: 42px; }
+  .brand-name { font-size: 11px; }
+  .brand-sub { max-width: 150px; font-size: 8px; }
+  .live-pill { padding: 8px 10px; font-size: 9px; }
+  .main { gap: 18px; }
+  .eyebrow { font-size: 9px; }
+  h1 { margin: 13px 0 8px; font-size: 52px; }
+  .intro { font-size: 12px; line-height: 1.5; }
+  .tags { display: none; }
+  .server-card { padding: 16px; border-radius: 10px; }
+  .server-title { font-size: 18px; }
+  .server-caption { font-size: 10px; }
+  .rule { margin: 10px 0; }
+  .info-row { padding: 5px 0; font-size: 11px; }
+  .status-line { margin-top: 8px; font-size: 11px; }
+  .footer { align-items: flex-end; }
+  .footer-note { max-width: 120px; font-size: 8px; }
+  .music { gap: 8px; padding: 7px; }
+  #musicButton { width: 30px; height: 30px; }
+  .music-copy { min-width: 80px; }
+  #volume, .music-label { display: none; }
 }
-
-#bottom label {
-  color: #fff;
-  font-size: 14px;
-  pointer-events: auto;
+@media (max-height: 650px) and (min-width: 851px) {
+  .shell { padding-top: 20px; padding-bottom: 18px; }
+  #logo { width: 50px; height: 50px; }
+  h1 { margin: 12px 0 8px; font-size: clamp(52px, 7vw, 78px); }
+  .intro { font-size: 13px; }
+  .tags { margin-top: 14px; }
+  .server-card { padding: 20px; }
+  .rule { margin: 13px 0; }
 }
-
-#volume {
-  display: inline-block;
-  width: 150px;
-  max-width: 30vw;
-  height: 18px;
-  vertical-align: middle;
-  cursor: pointer;
-  accent-color: #fa477f;
-  pointer-events: auto;
-}
-
-#musicState {
-  display: inline-block;
-  margin: 5px 12px;
-  color: #f3d9ef;
-  font-size: 13px;
-  pointer-events: none;
-}
-
-@media (max-width: 700px) {
-  #rpc {
-    left: 4%;
-    top: 7%;
-    width: 92%;
-    height: 80%;
-    padding: 2%;
-  }
-
-  #logo {
-    max-height: 110px;
-  }
-
-  h1 {
-    font-size: 30px;
-  }
-
-  #subtitle {
-    font-size: 11px;
-    letter-spacing: 2px;
-  }
-
-  #server_info {
-    width: 95%;
-    margin-top: 18px;
-    padding: 12px;
-  }
-
-  #serverName {
-    font-size: 18px;
-  }
-
-  #bottom {
-    bottom: 1%;
-  }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 </style>
 </head>
-
 <body>
+<div id="background" aria-hidden="true"></div>
+<div id="shade" aria-hidden="true"></div>
+<div id="grain" aria-hidden="true"></div>
 
-<div id="background"></div>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand">
+      <img id="logo" src="Logo_RPC.png" alt="RPC">
+      <div class="brand-copy">
+        <div class="brand-name">REDPAD CREATOR</div>
+        <div class="brand-sub">RUSSIAN MEDIUM ROLEPLAY</div>
+      </div>
+    </div>
+    <div class="live-pill"><span class="live-dot"></span><span id="connectionBadge">Инициализация</span></div>
+  </header>
 
-<main id="rpc">
-  <img
-    id="logo"
-    src="https://rpc-loading-screen.onrender.com/Logo_RPC.png"
-    alt="RPC"
-  >
+  <main class="main">
+    <section class="hero">
+      <div class="eyebrow">Твоя история начинается здесь</div>
+      <h1>YOUR CITY<span>YOUR RULES</span></h1>
+      <p class="intro">Добро пожаловать на <strong>RPC</strong> — город, в котором решения имеют значение. Подготавливаем мир, загружаем ресурсы и скоро увидимся в игре.</p>
+      <div class="tags">
+        <span class="tag">Russian Medium RP</span>
+        <span class="tag">DarkRP</span>
+        <span class="tag">Community · RPC</span>
+      </div>
+    </section>
 
-  <h1>RPC</h1>
+    <section class="server-card" aria-label="Информация о сервере">
+      <div class="card-label">Сведения о подключении</div>
+      <div class="server-title" id="serverName">RPC | Russian Medium RP</div>
+      <div class="server-caption">Сервер Garry's Mod · Соединение с игровым миром</div>
+      <div class="rule"></div>
+      <div class="info-row"><span class="key">Карта</span><span class="value" id="serverMap">Определение карты…</span></div>
+      <div class="info-row"><span class="key">Игровой режим</span><span class="value" id="serverGamemode">DarkRP</span></div>
+      <div class="info-row"><span class="key">Игроки</span><span class="value" id="serverPlayers">Ожидание данных</span></div>
+      <div class="status-line"><span class="status-led"></span><span id="status" aria-live="polite">Подготовка к подключению…</span></div>
+      <div class="progress-track" role="progressbar" aria-label="Загрузка файлов" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressBar"></div></div>
+      <div class="progress-meta"><span id="progressLabel">Ожидание загрузки</span><span id="progressPercent">0%</span></div>
+    </section>
+  </main>
 
-  <div id="subtitle">
-    RUSSIAN MEDIUM ROLEPLAY
-  </div>
-
-  <section id="server_info">
-    <div id="serverName">RPC | Russian Medium RP</div>
-    <div id="serverMap">Карта загружается...</div>
-    <div id="serverGamemode">Режим: DarkRP</div>
-    <div id="status">Подготовка к подключению...</div>
-  </section>
-</main>
-
-<div id="bottom">
-  <button id="musicButton" type="button">
-    ▶ Включить музыку
-  </button>
-
-  <label for="volume">Громкость:</label>
-
-  <input
-    id="volume"
-    type="range"
-    min="0"
-    max="100"
-    value="40"
-  >
-
-  <span id="musicState">Музыка выключена</span>
+  <footer class="footer">
+    <div class="footer-note"><strong>RPC COMMUNITY</strong><br>Увидимся на улицах города</div>
+    <div class="music">
+      <button id="musicButton" type="button" aria-label="Включить музыку" title="Включить музыку">▶</button>
+      <div class="music-copy"><span class="music-title">Саундтрек сервера</span><span id="musicState">Музыка выключена</span></div>
+      <label class="music-label" for="volume">VOL</label>
+      <input id="volume" type="range" min="0" max="100" value="35" aria-label="Громкость музыки">
+    </div>
+  </footer>
 </div>
 
-<audio
-  id="rpcTrack"
-  src="Dajjte_tank_-_Lyudi_68398361.mp3"
-  preload="auto"
-  loop>
-</audio>
-
+<audio id="rpcTrack" src="Dajjte_tank_-_Lyudi_68398361.mp3" preload="none" loop></audio>
 <script>
 (function () {
   "use strict";
-
-  var track = document.getElementById("rpcTrack");
-  var button = document.getElementById("musicButton");
-  var volume = document.getElementById("volume");
-  var state = document.getElementById("musicState");
-
-  if (!track || !button || !volume || !state) {
-    return;
-  }
+  var byId = function (id) { return document.getElementById(id); };
+  var track = byId("rpcTrack");
+  var button = byId("musicButton");
+  var volume = byId("volume");
+  var musicState = byId("musicState");
+  var status = byId("status");
+  var progressBar = byId("progressBar");
+  var progressLabel = byId("progressLabel");
+  var progressPercent = byId("progressPercent");
+  var progressTrack = document.querySelector(".progress-track");
+  var totalFiles = null;
+  var neededFiles = null;
+  var progress = 0;
 
   track.volume = Number(volume.value) / 100;
 
-  function updateVolume() {
-    track.volume = Number(volume.value) / 100;
+  function setStatus(message) {
+    if (message !== undefined && message !== null && String(message).trim()) {
+      status.textContent = String(message);
+      byId("connectionBadge").textContent = "Загрузка";
+    }
   }
-
+  function setProgress(value, label) {
+    if (!Number.isFinite(value)) return;
+    progress = Math.max(0, Math.min(100, value));
+    progressBar.style.width = progress + "%";
+    progressPercent.textContent = Math.round(progress) + "%";
+    progressTrack.setAttribute("aria-valuenow", String(Math.round(progress)));
+    if (label) progressLabel.textContent = label;
+  }
+  function updateProgress() {
+    if (typeof totalFiles === "number" && totalFiles > 0 && typeof neededFiles === "number") {
+      var completed = Math.max(0, totalFiles - neededFiles);
+      setProgress(completed / totalFiles * 100, "Загрузка файлов · " + completed + " из " + totalFiles);
+    } else if (typeof neededFiles === "number" && neededFiles === 0) {
+      setProgress(100, "Файлы загружены");
+    }
+  }
+  function updateVolume() { track.volume = Number(volume.value) / 100; }
   function playTrack() {
     var result = track.play();
-
     if (result && typeof result.then === "function") {
       result.then(function () {
-        button.textContent = "⏸ Пауза";
-        state.textContent = "Музыка играет";
+        button.textContent = "Ⅱ";
+        button.setAttribute("aria-label", "Поставить музыку на паузу");
+        button.title = "Пауза";
+        musicState.textContent = "Музыка играет";
       }).catch(function () {
-        button.textContent = "▶ Включить музыку";
-        state.textContent = "Нажми кнопку для запуска музыки";
+        button.textContent = "▶";
+        musicState.textContent = "Не удалось запустить аудио";
       });
-    } else {
-      button.textContent = "⏸ Пауза";
-      state.textContent = "Попытка запуска музыки";
     }
   }
-
   button.addEventListener("click", function () {
-    if (track.paused) {
-      playTrack();
-    } else {
+    if (track.paused) playTrack();
+    else {
       track.pause();
-      button.textContent = "▶ Продолжить";
-      state.textContent = "Музыка на паузе";
+      button.textContent = "▶";
+      button.setAttribute("aria-label", "Включить музыку");
+      button.title = "Включить музыку";
+      musicState.textContent = "Музыка на паузе";
     }
   });
-
   volume.addEventListener("input", updateVolume);
-  volume.addEventListener("change", updateVolume);
+  track.addEventListener("error", function () { musicState.textContent = "Аудиофайл недоступен"; });
+  track.addEventListener("playing", function () { musicState.textContent = "Музыка играет"; });
+  track.addEventListener("pause", function () { if (!track.ended) musicState.textContent = "Музыка на паузе"; });
 
-  track.addEventListener("ended", function () {
-    button.textContent = "▶ Включить музыку";
-    state.textContent = "Музыка закончилась";
-  });
-
-  track.addEventListener("error", function () {
-    state.textContent = "Не удалось загрузить музыку";
-  });
-
-  window.GameDetails = function (
-    servername,
-    serverurl,
-    mapname,
-    maxplayers,
-    steamid,
-    gamemode,
-    gamevolume,
-    lang,
-    gamemodeNice
-  ) {
-    document.getElementById("serverName").textContent =
-      servername || "RPC | Russian Medium RP";
-
-    document.getElementById("serverMap").textContent =
-      "Карта: " + (mapname || "неизвестна");
-
-    document.getElementById("serverGamemode").textContent =
-      "Режим: " + (gamemodeNice || gamemode || "DarkRP");
-
-    document.getElementById("status").textContent =
-      "Подключение к серверу...";
+  // Garry's Mod loading-screen callbacks.
+  window.GameDetails = function (servername, serverurl, mapname, maxplayers, steamid, gamemode, gamevolume, lang, gamemodeNice) {
+    byId("serverName").textContent = servername || "RPC | Russian Medium RP";
+    byId("serverMap").textContent = mapname || "Неизвестна";
+    byId("serverGamemode").textContent = gamemodeNice || gamemode || "DarkRP";
+    byId("serverPlayers").textContent = (maxplayers ? "Лимит " + maxplayers : "Данные получены");
+    byId("connectionBadge").textContent = "Подключение";
+    setStatus("Подключение к серверу…");
   };
-
   window.DownloadingFile = function (file) {
-    document.getElementById("status").textContent =
-      "Загрузка: " + (file || "файла");
+    setStatus("Загрузка: " + (file || "файла"));
+    progressLabel.textContent = "Получение ресурсов";
   };
-
-  window.SetStatusChanged = function (statusText) {
-    document.getElementById("status").textContent =
-      statusText || "Загрузка ресурсов...";
+  window.SetStatusChanged = function (statusText) { setStatus(statusText || "Загрузка ресурсов…"); };
+  window.SetFilesTotal = function (total) {
+    var value = Number(total);
+    if (Number.isFinite(value) && value >= 0) totalFiles = value;
+    updateProgress();
   };
-
-  window.SetFilesTotal = function (needed, total) {
-    document.getElementById("status").textContent =
-      "Загрузка файлов: " + (needed || 0) + " / " + (total || 0);
-  };
-
   window.SetFilesNeeded = function (needed) {
-    document.getElementById("status").textContent =
-      "Осталось загрузить файлов: " + (needed || 0);
+    var value = Number(needed);
+    if (Number.isFinite(value) && value >= 0) neededFiles = value;
+    updateProgress();
+    if (neededFiles === 0) {
+      setProgress(100, "Файлы загружены");
+      byId("connectionBadge").textContent = "Почти готово";
+    }
   };
-
-  // Не запускаем музыку автоматически:
-  // Chromium в Garry's Mod может блокировать автозапуск.
+  // Music intentionally starts only after a user click.
 })();
 </script>
-
 </body>
 </html>
