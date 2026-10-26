@@ -241,25 +241,26 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
 
   var backgroundA = byId("background");
   var backgroundB = byId("background-next");
-  var backgrounds = ["FonRP.png", "FonRP2.png"];
+  var backgrounds = [
+    "https://rpc-loading-screen.onrender.com/FonRP.png",
+    "https://rpc-loading-screen.onrender.com/FonRP2.png"
+  ];
   var backgroundIndex = 0;
   var backgroundBusy = false;
-  function preloadBackground(src) {
-    var image = new Image();
-    image.src = src;
-    return image;
-  }
-  var preloadedBackground = preloadBackground(backgrounds[1]);
+
   function changeBackground() {
     if (backgroundBusy) return;
     var nextIndex = (backgroundIndex + 1) % backgrounds.length;
     var nextSrc = backgrounds[nextIndex];
+    var image = new Image();
     backgroundBusy = true;
-    var image = preloadedBackground;
-    function showNext() {
+
+    // Attach handlers before src assignment to avoid missing a fast load event in GMod's CEF.
+    image.onload = function () {
       backgroundB.style.backgroundImage = 'url("' + nextSrc + '")';
       void backgroundB.offsetWidth;
       backgroundB.style.opacity = "1";
+
       window.setTimeout(function () {
         backgroundA.style.backgroundImage = 'url("' + nextSrc + '")';
         backgroundB.style.transition = "none";
@@ -268,15 +269,17 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
         backgroundB.style.transition = "";
         backgroundIndex = nextIndex;
         backgroundBusy = false;
-        preloadedBackground = preloadBackground(backgrounds[(backgroundIndex + 1) % backgrounds.length]);
       }, 1900);
-    }
-    if (image.complete && image.naturalWidth > 0) showNext();
-    else {
-      image.onload = showNext;
-      image.onerror = function () { backgroundBusy = false; };
-    }
+    };
+    image.onerror = function () {
+      backgroundBusy = false;
+      if (window.console && console.warn) console.warn("RPC background failed to load:", nextSrc);
+    };
+    image.src = nextSrc;
+    // Cached images may already be complete by the time src is assigned.
+    if (image.complete && image.naturalWidth > 0) image.onload();
   }
+
   window.setInterval(changeBackground, 10000);
 
   track.volume = Number(volume.value) / 100;
