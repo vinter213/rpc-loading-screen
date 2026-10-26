@@ -255,6 +255,91 @@ h1 span { text-shadow: none; }
 .progress-track { background: rgba(255,255,255,.12); }
 #progressBar { background: var(--red); }
 
+
+/* Flat black + cyan loading screen, based on the approved mockup */
+:root{--bg:#000;--panel:#050505;--line:#292929;--muted:#85858b;--red:#e51f3e;--violet:#00c8f5}
+html,body{background:#000;color:#f3f3f3}
+#background,#background-next{animation:none;transform:none;filter:grayscale(1) brightness(.27)}
+#shade{background:rgba(0,0,0,.42)}
+#grain{display:none}
+.shell{padding:clamp(16px,2.8vh,30px) clamp(18px,4vw,60px) 20px;gap:14px}
+.topbar{justify-content:center;align-items:center}
+.brand{justify-content:center}
+#logo{width:clamp(52px,7vh,76px);height:clamp(52px,7vh,76px);filter:none}
+.brand-name{color:#f3f3f3;letter-spacing:.22em}
+.brand-sub{color:#9a9a9a}
+.live-pill{position:absolute;right:clamp(18px,4vw,60px);top:clamp(16px,2.8vh,30px);border-radius:2px;background:#050505;border-color:#292929;color:#ddd;backdrop-filter:none}
+.live-dot{background:#00c8f5;box-shadow:none}
+.main{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(18px,3vh,32px);width:100%;max-width:1050px;flex:1;margin:0 auto}
+.hero{width:100%;text-align:center;padding:0}
+.hero:before{display:none}
+.eyebrow{justify-content:center;color:#aaa;font-family:Consolas,monospace;font-size:10px;letter-spacing:.22em}
+.eyebrow:before{display:none}
+h1{margin:0;font-family:Impact,"Arial Narrow",sans-serif;font-size:clamp(38px,5.5vh,68px);line-height:.95;letter-spacing:.015em;color:#f5f5f5}
+h1 span{display:inline;margin-left:.2em;color:#f5f5f5;-webkit-text-stroke:0;text-shadow:none}
+.intro{display:none}
+.tags{display:none}
+.server-staff-layout{width:min(100%,800px);grid-template-columns:1fr 1fr;gap:14px}
+.server-card,.staff-panel{border:1px solid #303035;border-radius:0;background:rgba(0,0,0,.94);box-shadow:none;backdrop-filter:none;padding:clamp(16px,2vh,24px)}
+.server-card:before,.staff-panel:before{height:0}
+.card-label{color:#d6d6d9;font-family:"Segoe UI",Arial,sans-serif;font-size:12px;letter-spacing:.04em;font-weight:800}
+.card-label:before,.card-label:after{content:none}
+.server-title{margin-top:10px;color:#f2f2f2;font-size:clamp(16px,1.5vw,21px);letter-spacing:0}
+.server-caption{color:#85858b}
+.rule{margin:15px 0;background:#242428}
+.info-row{padding:6px 0;font-family:"Segoe UI",Arial,sans-serif;font-size:12px}
+.info-row .key{color:#92929a}
+.info-row .value{color:#eee}
+.status-line{color:#e5e5e5}
+.status-led{background:#00c8f5;box-shadow:none;border-radius:0;animation:none}
+.progress-track{height:5px;margin-top:12px;background:#10171a;border-radius:0}
+#progressBar{background:#00c8f5;border-radius:0;box-shadow:none;transition:width .25s linear}
+.progress-meta{color:#8c8c92;font-family:Consolas,monospace}
+.staff-intro{color:#85858b}
+.staff-member{border-bottom-color:#202024}
+.staff-avatar{border:1px solid #303035;border-radius:0;background:#080808;color:#00c8f5;font-family:Consolas,monospace}
+.staff-name{color:#f2f2f2}
+.staff-role{color:#85858b}
+.staff-badge{border:0;border-radius:0;background:#00c8f5;color:#000;font-weight:800;padding:5px 7px}
+.footer{align-items:center}
+.footer-note{color:#777;font-family:"Segoe UI",Arial,sans-serif;letter-spacing:.05em}
+.footer-note strong{color:#ddd}
+.music{border:0;border-radius:0;background:transparent;backdrop-filter:none}
+#musicButton{border:1px solid #303035;border-radius:0;background:#050505;color:#00c8f5}
+#musicButton:hover{background:#101010}
+.music-title{color:#ddd}
+#musicState,.music-label{color:#777}
+#volume{accent-color:#00c8f5}
+@media(max-width:850px){
+ .shell{padding:16px;gap:12px}
+ .topbar{justify-content:flex-start}
+ .live-pill{position:static;margin-left:auto}
+ .main{gap:18px}
+ .server-staff-layout{grid-template-columns:1fr 1fr;gap:10px}
+ .hero:before{display:none}
+}
+@media(max-width:560px){
+ .shell{padding:12px}
+ .brand-sub{display:none}
+ .brand-name{font-size:10px}
+ #logo{width:42px;height:42px}
+ .live-pill{font-size:8px;padding:7px}
+ h1{font-size:clamp(30px,8vw,46px)}
+ .server-staff-layout{grid-template-columns:1fr}
+ .server-card,.staff-panel{padding:14px}
+ .footer-note{font-size:8px}
+ .music-copy{min-width:72px}
+}
+@media(max-height:650px) and (min-width:851px){
+ .shell{padding-top:12px;padding-bottom:12px;gap:8px}
+ .main{gap:12px}
+ #logo{width:44px;height:44px}
+ h1{font-size:44px}
+ .server-card,.staff-panel{padding:14px}
+ .rule{margin:9px 0}
+ .info-row{padding:4px 0}
+}
+
 </style>
 </head>
 <body>
