@@ -23,12 +23,14 @@ body {
   font-family: Inter, "Segoe UI", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-#background {
+#background, #background-next {
   position: fixed; inset: 0; z-index: 0;
   background: #100914 url("FonRP.png") center / cover no-repeat;
   transform: scale(1.025);
   animation: background-drift 24s ease-in-out infinite alternate;
+  will-change: opacity;
 }
+#background-next { opacity: 0; transition: opacity 1.8s ease-in-out; }
 #shade {
   position: fixed; inset: 0; z-index: 1; pointer-events: none;
   background:
@@ -166,6 +168,7 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
 </head>
 <body>
 <div id="background" aria-hidden="true"></div>
+<div id="background-next" aria-hidden="true"></div>
 <div id="shade" aria-hidden="true"></div>
 <div id="grain" aria-hidden="true"></div>
 
@@ -235,6 +238,46 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
   var totalFiles = null;
   var neededFiles = null;
   var progress = 0;
+
+  var backgroundA = byId("background");
+  var backgroundB = byId("background-next");
+  var backgrounds = ["FonRP.png", "Дождливый двор с героями GMod.png"];
+  var backgroundIndex = 0;
+  var backgroundBusy = false;
+  function preloadBackground(src) {
+    var image = new Image();
+    image.src = src;
+    return image;
+  }
+  var preloadedBackground = preloadBackground(backgrounds[1]);
+  function changeBackground() {
+    if (backgroundBusy) return;
+    var nextIndex = (backgroundIndex + 1) % backgrounds.length;
+    var nextSrc = backgrounds[nextIndex];
+    backgroundBusy = true;
+    var image = preloadedBackground;
+    function showNext() {
+      backgroundB.style.backgroundImage = 'url("' + nextSrc + '")';
+      void backgroundB.offsetWidth;
+      backgroundB.style.opacity = "1";
+      window.setTimeout(function () {
+        backgroundA.style.backgroundImage = 'url("' + nextSrc + '")';
+        backgroundB.style.transition = "none";
+        backgroundB.style.opacity = "0";
+        void backgroundB.offsetWidth;
+        backgroundB.style.transition = "";
+        backgroundIndex = nextIndex;
+        backgroundBusy = false;
+        preloadedBackground = preloadBackground(backgrounds[(backgroundIndex + 1) % backgrounds.length]);
+      }, 1900);
+    }
+    if (image.complete && image.naturalWidth > 0) showNext();
+    else {
+      image.onload = showNext;
+      image.onerror = function () { backgroundBusy = false; };
+    }
+  }
+  window.setInterval(changeBackground, 10000);
 
   track.volume = Number(volume.value) / 100;
 
