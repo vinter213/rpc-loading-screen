@@ -215,6 +215,33 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* RPC GMod HUD redesign */
+:root{--panel:rgba(8,7,12,.94);--line:rgba(226,210,230,.18);--muted:#aaa1b0;--red:#ed294f;--violet:#8c42bd}
+#shade{background:linear-gradient(90deg,rgba(4,3,7,.2),rgba(4,3,7,.03)),linear-gradient(0deg,rgba(4,3,7,.68),transparent 38%,rgba(4,3,7,.16))}
+#grain{opacity:.08}.shell{padding:clamp(18px,3vw,42px) clamp(20px,4vw,60px) 20px}
+#logo{width:60px;height:60px}.brand{gap:12px}.brand-name{letter-spacing:.15em}.brand-sub{letter-spacing:.1em}
+.live-pill{border-radius:3px;background:rgba(7,6,10,.85);backdrop-filter:none;border-color:rgba(237,41,79,.4);font-family:Consolas,monospace}
+.main{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(24px,4vw,60px);max-width:1500px}
+.hero{position:relative;padding-left:18px}.hero:before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(var(--red),var(--violet),transparent)}
+.eyebrow{color:#ff9bad;font-family:Consolas,monospace;font-size:10px;letter-spacing:.13em;gap:8px}.eyebrow:before{width:17px;background:var(--red)}
+h1{font-family:Impact,"Arial Narrow",sans-serif;font-size:clamp(60px,7.4vw,100px);letter-spacing:-.025em;line-height:.86}
+h1 span{margin-top:7px;color:#fff;-webkit-text-stroke:0;text-shadow:3px 3px 0 rgba(237,41,79,.4)}
+.intro{max-width:430px;font-size:14px;line-height:1.65}.tags{gap:6px;margin-top:20px}
+.tag{padding:6px 8px;border-radius:2px;background:rgba(7,6,10,.75);font-family:Consolas,monospace;font-size:9px;letter-spacing:.05em}
+.server-staff-layout{gap:10px}.server-card,.staff-panel{border-radius:4px;border-color:rgba(226,210,230,.2);background:rgba(8,7,12,.92);box-shadow:0 16px 40px rgba(0,0,0,.25);backdrop-filter:none}
+.server-card,.staff-panel{padding:clamp(17px,2vw,26px)}.server-card:before,.staff-panel:before{height:3px}
+.card-label{color:#f07891;font-family:Consolas,monospace;font-size:9px;letter-spacing:.12em}.card-label:before{content:"[ ";color:var(--red)}.card-label:after{content:" ]";color:var(--red)}
+.server-title{font-size:clamp(18px,1.55vw,23px);letter-spacing:-.02em}.server-caption,.staff-intro{font-size:11px}
+.rule{margin:18px 0}.info-row{padding:9px 0;font-family:Consolas,monospace;font-size:11px}.info-row .value{font-family:"Segoe UI",Arial,sans-serif}
+.status-line{font-size:11px}.status-led{border-radius:1px;animation:none}.progress-track{height:3px;border-radius:0}#progressBar{border-radius:0;box-shadow:none}.progress-meta{font-family:Consolas,monospace;font-size:9px}
+.staff-member{gap:10px;padding:12px 0}.staff-avatar{flex-basis:36px;width:36px;height:36px;border-radius:3px;background:rgba(237,41,79,.12);border-color:rgba(237,41,79,.4);font-family:Consolas,monospace;font-size:12px}
+.staff-name{font-size:12px}.staff-role{font-size:9px;letter-spacing:.06em}.staff-badge{border-radius:2px;padding:5px 6px;font-family:Consolas,monospace;font-size:8px}
+.footer-note{font-family:Consolas,monospace;font-size:9px}.music{border-radius:3px;background:rgba(7,6,10,.9);backdrop-filter:none}#musicButton{border-radius:3px}
+@media(max-width:1100px){.main{grid-template-columns:1fr;gap:22px}.hero{padding-left:16px}.server-staff-layout{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){.shell{padding:18px 20px}.server-staff-layout{grid-template-columns:1fr}h1{font-size:clamp(52px,10vw,76px)}}
+@media(max-width:520px){.shell{padding:13px}#logo{width:40px;height:40px}.hero{padding-left:12px}h1{font-size:49px}.intro{font-size:12px}.server-card,.staff-panel{padding:15px}}
+
 </style>
 </head>
 <body>
