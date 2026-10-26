@@ -93,7 +93,7 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
 .server-card::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: linear-gradient(90deg,var(--red),var(--violet),transparent); }
 
 .card-tabs { display: none; }
-.server-staff-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, .85fr); gap: 16px; align-items: stretch; }
+.server-staff-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; min-width: 0; }
 .server-staff-layout .server-card { min-width: 0; }
 .staff-panel {
   position: relative; overflow: hidden; padding: clamp(22px, 2.5vw, 34px);
@@ -155,12 +155,18 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
 @keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 4px rgba(255,49,88,.35); } }
 @keyframes background-drift { from { transform: scale(1.025) translate3d(0,0,0); } to { transform: scale(1.075) translate3d(-.6%,.4%,0); } }
 @media (max-width: 1100px) {
-  .server-staff-layout { grid-template-columns: 1fr; gap: 14px; }
+  .main { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .hero { text-align: center; }
+  .eyebrow { justify-content: center; }
+  .intro { margin-inline: auto; }
+  .tags { justify-content: center; }
+  .server-staff-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
   .staff-panel { padding: 20px; }
 }
 @media (max-width: 850px) {
   .shell { padding: 22px 24px; }
-  .main { grid-template-columns: 1fr; gap: 24px; max-width: 620px; }
+  .main { grid-template-columns: 1fr; gap: 24px; max-width: 900px; }
+  .server-staff-layout { grid-template-columns: 1fr; gap: 14px; }
   .hero { text-align: center; }
   .eyebrow { justify-content: center; }
   .intro { margin-inline: auto; }
@@ -255,20 +261,20 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
       <div class="progress-track" role="progressbar" aria-label="Загрузка файлов" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressBar"></div></div>
       <div class="progress-meta"><span id="progressLabel">Ожидание загрузки</span><span id="progressPercent">0%</span></div>
       </div>
-      <section class="staff-panel" id="staffPanel" aria-label="Команда STAFF">
-        <div class="card-label">Люди за проектом</div>
-        <div class="server-title">Команда RPC</div>
-        <p class="staff-intro">Команда, которая развивает сервер и помогает поддерживать порядок в городе.</p>
-        <div class="staff-member">
-          <div class="staff-avatar" aria-hidden="true">JV</div>
-          <div class="staff-info"><div class="staff-name">Jr ViNter</div><div class="staff-role">Owner · Владелец</div></div>
-          <span class="staff-badge">OWNER</span>
-        </div>
-        <div class="staff-member">
-          <div class="staff-avatar" aria-hidden="true">AE</div>
-          <div class="staff-info"><div class="staff-name">ARI Em</div><div class="staff-role">Co Owner · Совладелец</div></div>
-          <span class="staff-badge">STAFF</span>
-        </div>
+    </section>
+    <section class="staff-panel" id="staffPanel" aria-label="Команда STAFF">
+      <div class="card-label">Люди за проектом</div>
+      <div class="server-title">Команда RPC</div>
+      <p class="staff-intro">Команда, которая развивает сервер и помогает поддерживать порядок в городе.</p>
+      <div class="staff-member">
+        <div class="staff-avatar" aria-hidden="true">JV</div>
+        <div class="staff-info"><div class="staff-name">Jr ViNter</div><div class="staff-role">Owner · Владелец</div></div>
+        <span class="staff-badge">OWNER</span>
+      </div>
+      <div class="staff-member">
+        <div class="staff-avatar" aria-hidden="true">AE</div>
+        <div class="staff-info"><div class="staff-name">ARI Em</div><div class="staff-role">Staff · Команда сервера</div></div>
+        <span class="staff-badge">STAFF</span>
       </div>
     </section>
     </div>
