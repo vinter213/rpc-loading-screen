@@ -92,14 +92,17 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
 }
 .server-card::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: linear-gradient(90deg,var(--red),var(--violet),transparent); }
 
-.card-tabs { display: flex; gap: 8px; margin: 0 0 22px; }
-.card-tab {
-  flex: 1; padding: 10px 12px; border: 1px solid var(--line); border-radius: 7px;
-  background: rgba(255,255,255,.035); color: #b9b0c3; font: inherit; font-size: 10px;
-  font-weight: 800; letter-spacing: .16em; cursor: pointer; transition: .2s ease;
+.card-tabs { display: none; }
+.server-staff-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, .85fr); gap: 16px; align-items: stretch; }
+.server-staff-layout .server-card { min-width: 0; }
+.staff-panel {
+  position: relative; overflow: hidden; padding: clamp(22px, 2.5vw, 34px);
+  border: 1px solid rgba(255,255,255,.15); border-radius: 14px;
+  background: linear-gradient(145deg, rgba(25,18,34,.88), rgba(9,7,13,.82));
+  box-shadow: 0 28px 90px rgba(0,0,0,.35), inset 0 1px rgba(255,255,255,.05);
+  backdrop-filter: blur(18px);
 }
-.card-tab.active { border-color: rgba(255,49,88,.55); background: linear-gradient(110deg,rgba(255,49,88,.17),rgba(168,85,247,.15)); color: #fff; }
-.card-tab:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+.staff-panel::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: linear-gradient(90deg,var(--red),var(--violet),transparent); }
 .staff-panel[hidden], .server-panel[hidden] { display: none !important; }
 .staff-intro { margin: -10px 0 18px; color: var(--muted); font-size: 12px; line-height: 1.6; }
 .staff-member {
@@ -151,6 +154,10 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
 .music-label { color: #a99fb2; font-size: 9px; }
 @keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 4px rgba(255,49,88,.35); } }
 @keyframes background-drift { from { transform: scale(1.025) translate3d(0,0,0); } to { transform: scale(1.075) translate3d(-.6%,.4%,0); } }
+@media (max-width: 1100px) {
+  .server-staff-layout { grid-template-columns: 1fr; gap: 14px; }
+  .staff-panel { padding: 20px; }
+}
 @media (max-width: 850px) {
   .shell { padding: 22px 24px; }
   .main { grid-template-columns: 1fr; gap: 24px; max-width: 620px; }
@@ -234,12 +241,9 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
       </div>
     </section>
 
-    <section class="server-card" aria-label="Информация о сервере и команде">
-      <div class="card-tabs" role="tablist" aria-label="Категории загрузочного экрана">
-        <button class="card-tab active" id="serverTab" type="button" role="tab" aria-selected="true" aria-controls="serverPanel">СЕРВЕР</button>
-        <button class="card-tab" id="staffTab" type="button" role="tab" aria-selected="false" aria-controls="staffPanel">STAFF</button>
-      </div>
-      <div class="server-panel" id="serverPanel" role="tabpanel" aria-labelledby="serverTab">
+    <div class="server-staff-layout">
+    <section class="server-card" aria-label="Информация о сервере">
+      <div class="server-panel" id="serverPanel">
       <div class="card-label">Сведения о подключении</div>
       <div class="server-title" id="serverName">RPC | Russian Medium RP</div>
       <div class="server-caption">Сервер Garry's Mod · Соединение с игровым миром</div>
@@ -251,7 +255,7 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
       <div class="progress-track" role="progressbar" aria-label="Загрузка файлов" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressBar"></div></div>
       <div class="progress-meta"><span id="progressLabel">Ожидание загрузки</span><span id="progressPercent">0%</span></div>
       </div>
-      <div class="staff-panel" id="staffPanel" role="tabpanel" aria-labelledby="staffTab" hidden>
+      <section class="staff-panel" id="staffPanel" aria-label="Команда STAFF">
         <div class="card-label">Люди за проектом</div>
         <div class="server-title">Команда RPC</div>
         <p class="staff-intro">Команда, которая развивает сервер и помогает поддерживать порядок в городе.</p>
@@ -267,6 +271,7 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
         </div>
       </div>
     </section>
+    </div>
   </main>
 
   <footer class="footer">
@@ -297,22 +302,6 @@ h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,
   var totalFiles = null;
   var neededFiles = null;
   var progress = 0;
-
-  var serverTab = byId("serverTab");
-  var staffTab = byId("staffTab");
-  var serverPanel = byId("serverPanel");
-  var staffPanel = byId("staffPanel");
-  function showCategory(category) {
-    var showStaff = category === "staff";
-    serverPanel.hidden = showStaff;
-    staffPanel.hidden = !showStaff;
-    serverTab.classList.toggle("active", !showStaff);
-    staffTab.classList.toggle("active", showStaff);
-    serverTab.setAttribute("aria-selected", String(!showStaff));
-    staffTab.setAttribute("aria-selected", String(showStaff));
-  }
-  serverTab.addEventListener("click", function () { showCategory("server"); });
-  staffTab.addEventListener("click", function () { showCategory("staff"); });
 
   var backgroundA = byId("background");
   var backgroundB = byId("background-next");
