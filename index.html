@@ -242,6 +242,19 @@ h1 span{margin-top:7px;color:#fff;-webkit-text-stroke:0;text-shadow:3px 3px 0 rg
 @media(max-width:850px){.shell{padding:18px 20px}.server-staff-layout{grid-template-columns:1fr}h1{font-size:clamp(52px,10vw,76px)}}
 @media(max-width:520px){.shell{padding:13px}#logo{width:40px;height:40px}.hero{padding-left:12px}h1{font-size:49px}.intro{font-size:12px}.server-card,.staff-panel{padding:15px}}
 
+
+/* Flat colors only: remove gradients from all loading-screen elements */
+#background, #background-next { animation: none; transform: none; }
+#shade { background: rgba(4,3,7,.24); }
+.hero:before { background: var(--red); }
+h1 span { text-shadow: none; }
+.tag { background: rgba(7,6,10,.75); }
+.server-card, .staff-panel { background: rgba(8,7,12,.92); }
+.server-card:before, .staff-panel:before { background: var(--red); }
+.staff-avatar { background: rgba(237,41,79,.12); }
+.progress-track { background: rgba(255,255,255,.12); }
+#progressBar { background: var(--red); }
+
 </style>
 </head>
 <body>
